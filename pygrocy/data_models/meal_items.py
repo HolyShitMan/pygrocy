@@ -51,6 +51,69 @@ class RecipeItem(DataModel):
 
             return f"{path}?force_serve_as=picture&best_fit_width={width}"
 
+class RecipePosition(DataModel):
+    def __init__(self, response: RecipePositionResponse):
+        self._id = response.id
+        self._recipe_id = response.recipe_id
+        self._product_id = response.product_id
+        self._amount = response.amount
+        self._note = response.note
+        self._qu_id = response.qu_id
+        self._only_check_single_unit_in_stock = response.only_check_single_unit_in_stock,
+        self._ingredient_group = response.ingredient_group
+        self._not_check_stock_fulfillment = response.not_check_stock_fulfillment
+        self._row_created_timestamp = response.row_created_timestamp
+        self._variable_amount = response.variable_amount
+        self._price_factor = response.price_factor
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def recipe_id(self) -> int:
+        return self._recipe_id
+
+    @property
+    def product_id(self) -> int:
+        return self._product_id
+
+    @property
+    def amount(self) -> float:
+        return self._amount
+
+    @property
+    def note(self) -> str:
+        return self._note
+
+    @property
+    def qu_id(self) -> int:
+        return self._qu_id
+
+    @property
+    def only_check_single_unit_in_stock(self) -> bool:
+        return self._only_check_single_unit_in_stock
+
+    @property
+    def ingredient_group(self) -> str:
+        return self._ingredient_group
+
+    @property
+    def not_check_stock_fulfillment(self) -> bool:
+        return self._not_check_stock_fulfillment
+
+    @property
+    def row_created_timestamp(self) -> datetime:
+        return self._row_created_timestamp
+
+    @property
+    def variable_amount(self) -> str:
+        return self._variable_amount
+
+    @property
+    def price_factor(self) -> float:
+        return self._price_factor
+
 
 class MealPlanSection(DataModel):
     def __init__(self, response: MealPlanSectionResponse):
