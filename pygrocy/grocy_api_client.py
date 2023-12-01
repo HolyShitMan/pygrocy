@@ -67,6 +67,19 @@ class RecipeDetailsResponse(BaseModel):
     row_created_timestamp: datetime
     userfields: Optional[Dict] = None
 
+class RecipePositionResponse(BaseModel):
+    id: Optional[int] = None
+    recipe_id: Optional[int] = None
+    product_id: Optional[int] = None
+    amount: Optional[float] = None
+    note: Optional[str] = None
+    qu_id: Optional[int] = None
+    only_check_single_unit_in_stock: Optional[bool] = None
+    ingredient_group: Optional[str] = None
+    not_check_stock_fulfillment: Optional[bool] = None
+    row_created_timestamp: datetime
+    variable_amount: Optional[str] = None
+    price_factor: Optional[float] = None
 
 class QuantityUnitData(BaseModel):
     id: int
@@ -766,6 +779,16 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request(f"objects/recipes/{object_id}")
         if parsed_json:
             return RecipeDetailsResponse(**parsed_json)
+
+    def get_recipe_positions(self) -> List[RecipePositionResponse]:
+        parsed_json = self._do_get_request(f"objects/recipes_pos")
+        response_list = []
+        if parsed_json:
+            for data in parsed_json:
+                r = RecipePositionResponse(**data)
+                response_list.append(r)
+
+        return response_list
 
     def get_batteries(
         self, query_filters: List[str] = None

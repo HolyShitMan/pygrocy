@@ -8,6 +8,7 @@ from pygrocy.grocy_api_client import (
     MealPlanResponse,
     MealPlanSectionResponse,
     RecipeDetailsResponse,
+    RecipePositionResponse,
 )
 
 

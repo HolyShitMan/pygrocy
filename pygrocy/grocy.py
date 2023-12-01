@@ -8,7 +8,7 @@ from .base import DataModel  # noqa: F401
 from .data_models.battery import Battery
 from .data_models.chore import Chore
 from .data_models.generic import EntityType
-from .data_models.meal_items import MealPlanItem, MealPlanSection, RecipeItem
+from .data_models.meal_items import MealPlanItem, MealPlanSection, RecipeItem, RecipePosition
 from .data_models.product import Group, Product, ShoppingListProduct
 from .data_models.system import SystemConfig, SystemInfo, SystemTime
 from .data_models.task import Task
@@ -22,6 +22,7 @@ from .grocy_api_client import MealPlanResponse  # noqa: F401
 from .grocy_api_client import MissingProductResponse  # noqa: F401
 from .grocy_api_client import ProductDetailsResponse  # noqa: F401
 from .grocy_api_client import RecipeDetailsResponse  # noqa: F401
+from .grocy_api_client import RecipePositionResponse  # noqa: F401
 from .grocy_api_client import ShoppingListItem  # noqa: F401
 from .grocy_api_client import TaskResponse  # noqa: F401
 from .grocy_api_client import UserDto  # noqa: F401
@@ -340,6 +341,11 @@ class Grocy(object):
                 item.get_details(self._api_client)
         return meal_plan
 
+    def recipe(self, recipe_id: int) -> RecipeItem:
+        recipe = self._api_client.get_recipe(recipe_id)
+        if recipe:
+            return RecipeItem(recipe)
+
     def recipes(self) -> List[RecipeItem]:
         recipe_list: List[RecipeItem] = []
         recipes = self._api_client.get_recipes()
@@ -349,10 +355,16 @@ class Grocy(object):
 
         return recipe_list
 
-    def recipe(self, recipe_id: int) -> RecipeItem:
-        recipe = self._api_client.get_recipe(recipe_id)
-        if recipe:
-            return RecipeItem(recipe)
+    def recipe_positions(self, recipe_id: int) -> List[RecipePosition]:
+        pos_list: List[RecipeItem] = []
+        positions = self._api_client.get_recipe_positions()
+        if positions:
+            for position in positions:
+                pos = RecipePosition(position)
+                if pos.recipe_id == recipe_id:
+                    pos_list.append(pos)
+
+        return pos_list
 
     def batteries(
         self, query_filters: List[str] = None, get_details: bool = False
