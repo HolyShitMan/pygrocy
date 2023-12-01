@@ -340,6 +340,15 @@ class Grocy(object):
                 item.get_details(self._api_client)
         return meal_plan
 
+    def recipes(self) -> List[RecipeItem]:
+        recipe_list: List[RecipeItem] = []
+        recipes = self._api_client.get_recipes()
+        if recipes:
+            for recipe in recipes:
+                recipe_list.append(RecipeItem(recipe))
+
+        return recipe_list
+
     def recipe(self, recipe_id: int) -> RecipeItem:
         recipe = self._api_client.get_recipe(recipe_id)
         if recipe:

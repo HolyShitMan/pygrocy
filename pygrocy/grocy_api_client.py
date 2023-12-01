@@ -752,6 +752,16 @@ class GrocyApiClient(object):
             return [MealPlanResponse(**data) for data in parsed_json]
         return []
 
+    def get_recipes(self) -> List[RecipeDetailsResponse]:
+        parsed_json = self._do_get_request(f"objects/recipes")
+        recipe_response_list = []
+        if parsed_json:
+            for data in parsed_json:
+                r = RecipeDetailsResponse(**data)
+                recipe_response_list.append(r)
+
+        return recipe_response_list
+
     def get_recipe(self, object_id: int) -> RecipeDetailsResponse:
         parsed_json = self._do_get_request(f"objects/recipes/{object_id}")
         if parsed_json:
